@@ -1,0 +1,15 @@
+/* You can add global styles to this file, and also import other style files */
+
+.img-recipe {
+    width: 130px;
+    height: 110px;
+}
+
+.cursor-pointer {
+    cursor: pointer;
+}
+
+input.ng-invalid.ng-touched,
+textarea.ng-invalid.ng-touched {
+    border: 1px solid red;
+}
