@@ -10,6 +10,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ToastrModule } from 'ngx-toastr';
 import { CoreModule } from './core.module';
 import { SharedModule } from './shared/shared.module';
+import { shoppingListReducer } from './shopping-list/store/shopping-list.reducer';
+import { StoreModule } from '@ngrx/store';
 
 @NgModule({
   declarations: [AppComponent, HeaderComponent],
@@ -20,6 +22,7 @@ import { SharedModule } from './shared/shared.module';
     HttpClientModule,
     BrowserAnimationsModule,
     ToastrModule.forRoot(),
+    StoreModule.forRoot({ shoppingList: shoppingListReducer }),
     CoreModule,
     SharedModule,
   ],
