@@ -1,12 +1,24 @@
 import { Ingredient } from '../../shared/ingredient.model';
 import * as ShoppingListActions from './shopping-list.actions';
 
-const initialState = {
+export interface State {
+  ingredients: Ingredient[];
+  editedIngredient: Ingredient;
+  editedIngredientIndex: number;
+}
+
+export interface AppState {
+  shoppingList: State;
+}
+
+const initialState: State = {
   ingredients: [new Ingredient('ABC', 10), new Ingredient('XYZ', 20)],
+  editedIngredient: null,
+  editedIngredientIndex: -1,
 };
 
 export function shoppingListReducer(
-  state = initialState,
+  state: State = initialState,
   action: ShoppingListActions.ShoppingListActions
 ) {
   switch (action.type) {
@@ -25,21 +37,37 @@ export function shoppingListReducer(
       };
     case ShoppingListActions.UPDATE_INGREDIENT:
       const updatedIngredient = {
-        ...state.ingredients[action.payload[0]],
-        ...action.payload[1],
+        ...state.ingredients[state.editedIngredientIndex],
+        ...(action.payload as Ingredient),
       };
       const updatedIngredients = [...state.ingredients];
-      updatedIngredients[action.payload[0]] = updatedIngredient;
+      updatedIngredients[state.editedIngredientIndex] = updatedIngredient;
       return {
         ...state,
         ingredients: updatedIngredients,
+        editedIngredient: null,
+        editedIngredientIndex: -1,
       };
     case ShoppingListActions.DELETE_INGREDIENT:
       const modifiedIngredients = [...state.ingredients];
-      modifiedIngredients.splice(action.payload as number, 1);
+      modifiedIngredients.splice(state.editedIngredientIndex, 1);
       return {
         ...state,
         ingredients: modifiedIngredients,
+        editedIngredient: null,
+        editedIngredientIndex: -1,
+      };
+    case ShoppingListActions.START_EDIT:
+      return {
+        ...state,
+        editedIngredient: { ...state.ingredients[action.payload as number] },
+        editedIngredientIndex: action.payload,
+      };
+    case ShoppingListActions.STOP_EDIT:
+      return {
+        ...state,
+        editedIngredient: null,
+        editedIngredientIndex: -1,
       };
     default:
       return initialState;
