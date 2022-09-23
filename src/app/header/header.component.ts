@@ -8,7 +8,9 @@ import {
 import { Subscription } from 'rxjs';
 import { AuthService } from '../auth/auth.service';
 import { User } from '../auth/user.model';
+import * as fromApp from '../store/app.reducer';
 import { DataStorageService } from '../shared/data-storage.service';
+import { Store } from '@ngrx/store';
 
 @Component({
   selector: 'app-header',
@@ -22,12 +24,13 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   constructor(
     public dataService: DataStorageService,
-    private auth: AuthService
+    private auth: AuthService,
+    private store: Store<fromApp.AppState>
   ) {}
 
   ngOnInit() {
-    this.userSub = this.auth.user.subscribe((user: User) => {
-      this.isAuthenticated = user == null ? false : true;
+    this.userSub = this.store.select('auth').subscribe((state) => {
+      this.isAuthenticated = state?.user == null ? false : true;
     });
   }
 
